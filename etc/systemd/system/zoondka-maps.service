@@ -1,0 +1,12 @@
+[Unit]
+Description=zoondka-maps app server
+After=network.target
+
+[Service]
+Restart=on-failure
+WorkingDirectory=/home/zoonmaps/.m2/repository/zoondka-maps/zoondka-maps
+ExecStart=/bin/bash -c "export VERSION=$(/usr/bin/xmllint --xpath '//release/text()' maven-metadata-local.xml) ; \
+                       /usr/bin/java -jar $VERSION/zoondka-maps-$VERSION.jar"
+
+[Install]
+WantedBy=multi-user.target

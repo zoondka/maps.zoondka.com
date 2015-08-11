@@ -1,0 +1,15 @@
+[Unit]
+Description=Packet Filtering Framework
+DefaultDependencies=no
+After=systemd-sysctl.service
+Before=sysinit.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/iptables/rules.v4 ; /etc/iptables/rules.v6
+ExecReload=/etc/iptables/rules.v4 ; /etc/iptables/rules.v6
+ExecStop=/etc/iptables/flush
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

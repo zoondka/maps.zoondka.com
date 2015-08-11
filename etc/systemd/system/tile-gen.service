@@ -1,0 +1,11 @@
+[Unit]
+Description=tile-gen vector tile generation server
+After=network.target
+
+[Service]
+Restart=on-failure
+WorkingDirectory=/home/zoonmaps/zoondka/tile-gen
+ExecStart=/home/zoonmaps/.pyenv/shims/python src/server.py
+
+[Install]
+WantedBy=multi-user.target

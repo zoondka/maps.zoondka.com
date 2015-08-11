@@ -1,0 +1,47 @@
+upstream tile-srv {
+    server 127.0.0.1:8088;
+    keepalive 32;
+}
+
+upstream zoondka-maps {
+    server 127.0.0.1:8090;
+    keepalive 32;
+}
+
+server {
+	listen 	    	80;
+	server_name 	maps.zoondka.com;
+       	return 	    	301 https://$server_name$request_uri;
+}
+
+server {
+       	listen         		443 ssl;
+       	server_name    		maps.zoondka.com;
+	
+	ssl_certificate     	/etc/ssl/certs/maps.zoondka.com.crt;
+    	ssl_certificate_key 	/etc/ssl/private/maps.zoondka.com.key;
+    	ssl_protocols       	TLSv1 TLSv1.1 TLSv1.2;
+    	ssl_ciphers         	HIGH:!aNULL:!MD5;
+	
+	location / {
+		proxy_pass  http://zoondka-maps;
+
+       		# tell http-kit to keep the connection
+        	proxy_http_version 1.1;
+        	proxy_set_header Connection "";
+
+        	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        	proxy_set_header Host $http_host;
+	}
+
+        location /tile-srv/ {
+		proxy_pass  http://tile-srv/;
+
+       		# tell http-kit to keep the connection
+        	proxy_http_version 1.1;
+        	proxy_set_header Connection "";
+
+        	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        	proxy_set_header Host $http_host;
+	}
+}
