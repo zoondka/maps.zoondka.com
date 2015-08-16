@@ -41,10 +41,6 @@ iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j AC
 iptables -A OUTPUT -o eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
 
-# Allow incoming PostgreSQL
-iptables -A INPUT -i eth0 -p tcp --dport 5432 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 5432 -m state --state ESTABLISHED -j ACCEPT
-
 # Allow incoming pings
 iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
 iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
