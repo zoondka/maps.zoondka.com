@@ -1,0 +1,25 @@
+[Unit]
+Description=tilerator - Map tiles pre-generation service
+Documentation=https://github.com/kartotherian/tilerator
+After=network.target local-fs.target
+
+[Service]
+Type=simple
+LimitNOFILE=10000
+PIDFile=%t/tilerator.pid
+User=tilerator
+Group=tilerator
+WorkingDirectory=/srv/tilerator
+Environment="NODE_PATH='/srv/tilerator/node_modules'" "TILERATOR_PORT=16534"
+ExecStart=/usr/bin/nodejs server.js -c /etc/tilerator/config.yaml
+Restart=always
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=tilerator
+TimeoutStartSec=5
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target
+
