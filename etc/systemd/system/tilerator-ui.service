@@ -1,0 +1,25 @@
+[Unit]
+Description=tilerator ui - UI for map tiles pre-generation service
+Documentation=https://github.com/kartotherian/tilerator
+After=network.target local-fs.target
+
+[Service]
+Type=simple
+LimitNOFILE=10000
+PIDFile=%t/tilerator-ui.pid
+User=tilerator
+Group=tilerator
+WorkingDirectory=/srv/tilerator
+Environment="NODE_PATH='/srv/tilerator/node_modules'" "TILERATOR_PORT=16533"
+ExecStart=/usr/bin/nodejs server.js -c /etc/tilerator/config.ui.yaml
+Restart=always
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=tilerator-ui
+TimeoutStartSec=5
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target
+

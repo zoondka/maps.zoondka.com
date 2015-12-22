@@ -1,0 +1,3 @@
+cluster_name: 'Tile Cluster'
+authenticator: PasswordAuthenticator
+authorizer: CassandraAuthorizer
