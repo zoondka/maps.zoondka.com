@@ -9,8 +9,8 @@ LimitNOFILE=10000
 PIDFile=%t/tilerator.pid
 User=tilerator
 Group=tilerator
-WorkingDirectory=/srv/tilerator
-Environment="NODE_PATH='/srv/tilerator/node_modules'" "TILERATOR_PORT=16534"
+WorkingDirectory=/usr/local/lib/node_modules/tilerator
+Environment="NODE_PATH='/usr/local/lib/node_modules/tilerator/node_modules'" "TILERATOR_PORT=16534"
 ExecStart=/usr/bin/nodejs server.js -c /etc/tilerator/config.yaml
 Restart=always
 RestartSec=5

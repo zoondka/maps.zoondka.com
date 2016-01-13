@@ -1,16 +1,12 @@
 # Generates vtiles from database
 gen:
   uri: bridge://
+  datasource:
+    dbname: gis
+    type: postgis
   xml:
     npm: ["osm-bright-source", "data.xml"]
-  xmlSetDataSource:
-    if:
-      dbname: gis
-      host: ''
-      type: postgis
-    set:
-      user: {var: osmdb-user}
-      password: {var: osmdb-pswd}
+
 
 # View tiles as generated directly from the database
 gg:
@@ -34,8 +30,6 @@ v2:
     maxzoom: 15
     keyspace: v2
     cp: 127.0.0.1 
-    username: {var: cassandra-user}
-    password: {var: cassandra-pswd}
     durablewrite: 0
     createIfMissing: true
 
@@ -47,8 +41,6 @@ v3:
     maxzoom: 15
     keyspace: v3
     cp: 127.0.0.1 
-    username: {var: cassandra-user}
-    password: {var: cassandra-pswd}
     durablewrite: 0
     createIfMissing: true
 

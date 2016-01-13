@@ -51,8 +51,7 @@ services:
       #   - domain1.com
       #   - domain2.org
 
-      sources: ./sources.yaml
-      variables: ./variables.yaml
+      sources: /etc/tilerator/sources.yaml
  
       # If true, runs this instance without processing tiles
       # This could be good for queue management
