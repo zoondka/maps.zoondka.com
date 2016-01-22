@@ -1,7 +1,7 @@
 # Number of worker processes to spawn.
 # Set to 0 to run everything in a single process without clustering.
 # Use 'ncpu' to run as many workers as there are CPU units
-num_workers: 10
+num_workers: 12
 
 # Log error messages and gracefully restart a worker if v8 reports that it
 # uses more heap (note: not RSS) than this many mb.
@@ -53,6 +53,4 @@ services:
 
       sources: /etc/tilerator/sources.yaml
  
-      # If true, runs this instance without processing tiles
-      # This could be good for queue management
-      uiOnly: false
+      daemonOnly: true
