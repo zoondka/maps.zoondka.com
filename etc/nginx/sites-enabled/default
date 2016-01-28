@@ -1,5 +1,5 @@
-upstream tile-srv {
-    server 127.0.0.1:6533;
+upstream kartozoa {
+    server 127.0.0.1:16532;
     keepalive 32;
 }
 
@@ -34,8 +34,8 @@ server {
         	proxy_set_header Host $http_host;
 	}
 
-        location /tile-srv/ {
-		proxy_pass  http://tile-srv/;
+        location /kartozoa/ {
+		proxy_pass  http://kartozoa/;
 
        		# tell http-kit to keep the connection
         	proxy_http_version 1.1;

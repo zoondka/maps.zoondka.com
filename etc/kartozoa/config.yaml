@@ -1,0 +1,18 @@
+num_workers: 0
+worker_heap_limit_mb: 250
+
+logging:
+  level: trace
+
+metrics:
+  type: info
+
+services:
+  - name: kartozoa
+    module: ./app.js
+    conf:
+      port: 16532
+      interface: localhost
+      cors: '*'
+      spec: ./spec.yaml
+      sources: /etc/kartozoa/sources.yaml
