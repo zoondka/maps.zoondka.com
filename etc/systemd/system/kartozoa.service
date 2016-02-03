@@ -1,5 +1,5 @@
 [Unit]
-Description=kartozoa - Kartotherian Tile Server Remix
+Description=kartozoa - Simple Kartotherian Tile Server Remix
 Documentation=https://github.com/zoondka/kartozoa
 After=network.target local-fs.target
 
@@ -11,7 +11,7 @@ User=kartozoa
 Group=kartozoa
 WorkingDirectory=/usr/local/lib/node_modules/kartozoa
 Environment="NODE_PATH='/usr/local/lib/node_modules/kartozoa/node_modules'" "KARTOZOA_PORT=16532"
-ExecStart=/usr/bin/node server.js -c /etc/kartozoa/config.yaml
+ExecStart=/usr/bin/nodejs server.js -c /etc/kartozoa/config.yaml
 Restart=always
 RestartSec=5
 StandardOutput=syslog

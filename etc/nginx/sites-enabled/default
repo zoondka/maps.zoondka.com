@@ -4,7 +4,7 @@ upstream kartozoa {
 }
 
 upstream zoondka-maps {
-    server 127.0.0.1:6533;
+    server 127.0.0.1:16531;
     keepalive 32;
 }
 
