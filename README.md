@@ -1,2 +1,2 @@
 # maps.zoondka.com
-Configuration & Provisioning
+Configuration & provisioning for our tile server @ maps.zoondka.com
