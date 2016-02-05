@@ -1,0 +1,6 @@
+---
+- name: provision maps.zoondka.com tile server stack
+  hosts: all
+  
+  roles:
+    - nginx

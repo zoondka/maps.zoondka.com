@@ -1,0 +1,12 @@
+---
+- name: install
+  become: yes
+  become_method: sudo
+  apt: name=nginx update_cache=yes state=present
+
+- name: copy configuration & restart
+  become: yes
+  become_method: sudo
+  # TODO: setup Nginx conf.d 
+  copy: src= dest=/etc/nginx/
+  notify: restart nginx
