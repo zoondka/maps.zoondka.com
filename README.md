@@ -14,9 +14,8 @@ git clone https://github.com/zoondka/maps.zoondka.com
 cd maps.zoondka.com
 vagrant up
 ```
-With the VM up & running, you can re-provision it anytime using the `ansible-playbook` command directly:
+With the VM up & running, you can re-provision it anytime with `vagrant provision` or by linking to the vagrant inventory file & using the `ansible-playbook` command directly:
 ```shell
-ansible-playbook \
-  -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory \
-  playbook.yml
+ln -s .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory dev
+ansible-playbook -i dev playbook.yml 
 ```
