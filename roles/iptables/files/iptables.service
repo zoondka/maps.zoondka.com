@@ -6,9 +6,14 @@ Before=sysinit.target
 
 [Service]
 Type=oneshot
+User=iptables
+Group=iptables
 ExecStart=/etc/iptables/rules.v4 ; /etc/iptables/rules.v6
 ExecReload=/etc/iptables/rules.v4 ; /etc/iptables/rules.v6
 ExecStop=/etc/iptables/flush
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=iptables
 RemainAfterExit=yes
 
 [Install]

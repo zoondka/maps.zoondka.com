@@ -1,0 +1,20 @@
+---
+- name: install
+  copy: src=iptables.service dest=/etc/systemd/system/
+  notify:
+    - reload systemd
+    - restart iptables
+
+- name: add user
+  user:
+    name: iptables
+    createhome: no
+  
+- name: copy configuration
+  copy:
+    src: iptables
+    dest: /etc/
+    mode: 0754
+    owner: iptables
+    group: iptables
+  notify: restart iptables
