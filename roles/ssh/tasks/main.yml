@@ -1,0 +1,4 @@
+---
+- name: copy configuration
+  copy: src=sshd_config dest=/etc/ssh/
+  notify: restart ssh
