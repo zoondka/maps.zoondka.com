@@ -1,6 +1,8 @@
 ---
-- name: provision maps.zoondka.com tile server stack
+- name: provision zoondka maps tile server stack
   hosts: all
+  become: yes
+  become_method: sudo
   
   roles:
     - nginx

@@ -1,12 +1,25 @@
 ---
 - name: install
-  become: yes
-  become_method: sudo
   apt: name=nginx update_cache=yes state=present
 
-- name: copy configuration & restart
-  become: yes
-  become_method: sudo
-  # TODO: setup Nginx conf.d 
+- name: copy ssl cert
+  copy:
+    content: '{{ ssl_cert }}'
+    dest: /etc/ssl/certs/maps.zoondka.com.crt
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+
+- name: copy ssl key
+  copy:
+    content: '{{ ssl_key }}'
+    dest: /etc/ssl/private/maps.zoondka.com.key
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart nginx
+
+- name: copy configuration
   copy: src= dest=/etc/nginx/
   notify: restart nginx
