@@ -6,4 +6,4 @@
   copy: src=cpufrequtils dest=/etc/default/
   notify:
     - reboot
-    - wait for start
+    - wait for system start
