@@ -1,0 +1,9 @@
+---
+- name: install cpufrequtils
+  apt: name=cpufrequtils update_cache=yes state=present
+  
+- name: set performance governor
+  copy: src=cpufrequtils dest=/etc/default/
+  notify:
+    - reboot
+    - wait for start
