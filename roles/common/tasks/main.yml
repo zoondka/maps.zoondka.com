@@ -7,3 +7,15 @@
   notify:
     - reboot
     - wait for system start
+
+- name: set SysFS rotational flag
+  shell: "echo 0 > /sys/class/block/sda/queue/rotational"
+
+- name: set noop scheduler
+  shell: "echo noop > /sys/block/sda/queue/scheduler"
+
+- name: set read-ahead value
+  shell: "echo 8 > /sys/class/block/sda/queue/read_ahead_kb"
+
+- name: disable zone_reclaim_mode
+  shell: "echo 0 > /proc/sys/vm/zone_reclaim_mode"

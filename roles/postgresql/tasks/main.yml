@@ -1,6 +1,6 @@
 ---
 - name: install
-  apt: name={{item}} update_cache=yes state=present
+  apt: name={{ item }} update_cache=yes state=present
   with_items:
     - postgresql-9.4-postgis-2.1
     - postgresql-contrib-9.4
