@@ -11,3 +11,4 @@
     - nginx
     - postgresql
     - java
+    - cassandra
