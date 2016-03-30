@@ -19,3 +19,14 @@
 
 - name: disable zone_reclaim_mode
   shell: "echo 0 > /proc/sys/vm/zone_reclaim_mode"
+
+- name: set max map count
+  lineinfile: dest=/etc/sysctl.conf  line="vm.max_map_count = 131072"
+  register: sysctl
+
+- name: restart sysctl
+  when: sysctl.changed
+  shell: "sysctl -p"
+
+- name: set blockdev readahead
+  shell: "blockdev --setra 128 /dev/sda"

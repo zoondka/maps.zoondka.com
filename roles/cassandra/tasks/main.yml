@@ -8,3 +8,12 @@
 
 - name: install
   apt: name=datastax-ddc update_cache=yes state=present
+
+- name: set resource limits
+  copy: src=cassandra.conf dest=/etc/security/limits.d/
+  register: limits
+
+- name: restart
+  when: limits.changed
+  service: name=cassandra state=restarted enabled=yes
+  
