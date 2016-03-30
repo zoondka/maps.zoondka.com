@@ -9,7 +9,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart nginx
+  register: cert
 
 - name: copy ssl key
   copy:
@@ -18,8 +18,12 @@
     owner: root
     group: root
     mode: 0600
-  notify: restart nginx
+  register: key
 
 - name: copy configuration
   copy: src= dest=/etc/nginx/
-  notify: restart nginx
+  register: conf
+
+- name: restart
+  when: cert.changed or key.changed or conf.changed
+  service: name=nginx state=restarted enabled=yes

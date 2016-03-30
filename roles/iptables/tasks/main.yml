@@ -1,9 +1,7 @@
 ---
 - name: install
   copy: src=iptables.service dest=/etc/systemd/system/
-  notify:
-    - reload systemd
-    - restart iptables
+  register: service
 
 - name: add user
   user:
@@ -17,4 +15,12 @@
     mode: 0754
     owner: iptables
     group: iptables
-  notify: restart iptables
+  register: conf
+
+- name: reload systemd
+  when: service.changed
+  command: systemctl daemon-reload
+
+- name: restart
+  when: service.changed or conf.changed
+  service: name=iptables state=restarted enabled=yes

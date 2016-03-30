@@ -1,4 +1,8 @@
 ---
 - name: copy configuration
   copy: src=sshd_config dest=/etc/ssh/
-  notify: restart ssh
+  register: conf
+
+- name: restart
+  when: conf.changed
+  service: name=sshd state=restarted enabled=yes

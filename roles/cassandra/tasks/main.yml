@@ -1,4 +1,5 @@
 ---
+# TODO: only add if doesn't exist
 - name: add DataStax repository to sources
   shell: 'echo "deb http://debian.datastax.com/datastax-ddc 3.4 main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list'
 
@@ -7,4 +8,3 @@
 
 - name: install
   apt: name=datastax-ddc update_cache=yes state=present
-

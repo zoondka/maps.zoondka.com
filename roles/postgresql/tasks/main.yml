@@ -7,8 +7,12 @@
 
 - name: enable conf.d configuration
   replace: dest=/etc/postgresql/9.4/main/postgresql.conf regexp="^#include_dir" replace="include_dir"
-  notify: restart psql
+  register: conf
   
 - name: copy conf.d configuration
   copy: src=settings.conf dest=/etc/postgresql/9.4/main/conf.d/
-  notify: restart psql
+  register: conf_d
+
+- name: restart
+  when: conf.changed or conf_d.changed
+  service: name=postgresql state=restarted enabled=yes
