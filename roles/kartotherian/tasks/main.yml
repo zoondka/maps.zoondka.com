@@ -1,0 +1,21 @@
+---
+- name: install dependencies
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - git
+    - build-essential
+    - proj-bin
+    - libgeos-dev
+    - osm2pgsql
+    - sqlite3
+    - nodejs-legacy
+    - npm
+
+- name: "tilerator : download"
+  git: repo=https://github.com/kartotherian/tilerator.git dest=/srv/tilerator
+
+- name: "tilerator : update submodules"
+  shell: git submodule update --init chdir=/srv/tilerator
+
+- name: "tilerator : install"
+  shell: npm install -g --production --no-optional chdir=/srv/tilerator
