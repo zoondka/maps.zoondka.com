@@ -10,12 +10,21 @@
     - sqlite3
     - nodejs-legacy
     - npm
+    
+- stat: path=/srv/tilerator
+  register: tilerator
 
+- set_fact:
+    installed: tilerator.stat.exists
+  
 - name: "tilerator : download"
+  when: not installed
   git: repo=https://github.com/kartotherian/tilerator.git dest=/srv/tilerator
 
 - name: "tilerator : update submodules"
+  when: not installed
   shell: git submodule update --init chdir=/srv/tilerator
 
 - name: "tilerator : install"
+  when: not installed
   shell: npm install -g --production --no-optional chdir=/srv/tilerator
