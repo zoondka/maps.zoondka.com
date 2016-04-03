@@ -10,6 +10,7 @@
     - sqlite3
     - nodejs-legacy
     - npm
+    - redis-server
     
 - stat: path=/srv/tilerator
   register: tilerator
@@ -18,13 +19,42 @@
     installed: tilerator.stat.exists
   
 - name: "tilerator : download"
-  when: not installed
   git: repo=https://github.com/kartotherian/tilerator.git dest=/srv/tilerator
+  register: src
 
 - name: "tilerator : update submodules"
-  when: not installed
+  when: not installed or src.changed
   shell: git submodule update --init chdir=/srv/tilerator
 
 - name: "tilerator : install"
-  when: not installed
+  when: not installed or src.changed
   shell: npm install -g --production --no-optional chdir=/srv/tilerator
+
+- name: "tilerator : add user"
+  user: name=tilerator createhome=no
+
+- name: "tilerator : copy service files"
+  copy: src=tilerator/{{ item }} dest=/etc/systemd/system/
+  with_items:
+    - tilerator.service
+    - tilerator-ui.service
+  register: service
+
+- name: "tilerator : make config dir"
+  file: path=/etc/tilerator state=directory
+  
+- name: "tilerator : copy config"
+  copy: src=tilerator/{{ item }} dest=/etc/tilerator/
+  with_items:
+    - config.yaml
+    - config.ui.yaml
+    - sources.yaml
+  register: conf
+
+- name: reload systemd
+  when: service.changed
+  command: systemctl daemon-reload
+
+- name: "tilerator : restart"
+  when: service.changed or conf.changed
+  service: name=tilerator state=restarted enabled=yes
