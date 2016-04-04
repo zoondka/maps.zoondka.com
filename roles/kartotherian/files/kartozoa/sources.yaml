@@ -7,6 +7,7 @@ v2:
     keyspace: v2
     cp: 127.0.0.1
     durablewrite: 0
+    createIfMissing: true
 
 oz:
   uri: overzoom://
