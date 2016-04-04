@@ -38,7 +38,7 @@
   with_items:
     - tilerator.service
     - tilerator-ui.service
-  register: service
+  register: services
 
 - name: "tilerator : make config dir"
   file: path=/etc/tilerator state=directory
@@ -52,9 +52,56 @@
   register: conf
 
 - name: reload systemd
+  when: services.changed
+  command: systemctl daemon-reload
+
+- name: "tilerator : restart daemon"
+  when: services.changed or conf.changed
+  service: name=tilerator state=restarted enabled=yes
+
+- name: "tilerator : restart ui"
+  when: services.changed or conf.changed
+  service: name=tilerator-ui state=restarted enabled=yes
+
+- stat: path=/srv/kartozoa
+  register: kartozoa
+
+- set_fact:
+    installed: kartozoa.stat.exists
+  
+- name: "kartozoa : download"
+  git: repo=https://github.com/zoondka/kartozoa.git dest=/srv/kartozoa
+  register: src
+
+- name: "kartozoa : update submodules"
+  when: not installed or src.changed
+  shell: git submodule update --init chdir=/srv/kartozoa
+
+- name: "kartozoa : install"
+  when: not installed or src.changed
+  shell: npm install -g --production --no-optional chdir=/srv/kartozoa
+
+- name: "kartozoa : add user"
+  user: name=kartozoa createhome=no
+
+- name: "kartozoa : copy service files"
+  copy: src=kartozoa/kartozoa.service dest=/etc/systemd/system/
+  register: service
+
+- name: "kartozoa : make config dir"
+  file: path=/etc/kartozoa state=directory
+  
+- name: "kartozoa : copy config"
+  copy: src=kartozoa/{{ item }} dest=/etc/kartozoa/
+  with_items:
+    - config.yaml
+    - sources.yaml
+  register: conf
+
+- name: reload systemd
   when: service.changed
   command: systemctl daemon-reload
 
-- name: "tilerator : restart"
+- name: "kartozoa : restart"
   when: service.changed or conf.changed
-  service: name=tilerator state=restarted enabled=yes
+  service: name=kartozoa state=restarted enabled=yes
