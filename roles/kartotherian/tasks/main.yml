@@ -11,23 +11,19 @@
     - nodejs-legacy
     - npm
     - redis-server
-    
-- stat: path=/srv/tilerator
-  register: tilerator
 
-- set_fact:
-    installed: tilerator.stat.exists
-  
+## Tilerator ##
+
 - name: "tilerator : download"
   git: repo=https://github.com/kartotherian/tilerator.git dest=/srv/tilerator
   register: src
 
 - name: "tilerator : update submodules"
-  when: not installed or src.changed
+  when: src.changed
   shell: git submodule update --init chdir=/srv/tilerator
 
 - name: "tilerator : install"
-  when: not installed or src.changed
+  when: src.changed
   shell: npm install -g --production --no-optional chdir=/srv/tilerator
 
 - name: "tilerator : add user"
@@ -51,6 +47,48 @@
     - sources.yaml
   register: conf
 
+# psql --- #
+
+- name: "tilerator : add psql user"
+  become_user: postgres
+  shell: createuser -s tilerator --no-superuser
+  ignore_errors: True
+
+- name: "tilerator : add gis database"
+  become_user: postgres
+  shell: createdb -E UTF8 -T template0 gis
+  ignore_errors: True
+
+- name: "tilerator : add hstore & postgis extensions"
+  become_user: postgres
+  shell: psql -d gis -c 'CREATE EXTENSION hstore; CREATE EXTENSION postgis;'
+  ignore_errors: True
+
+- name: "tilerator : grant gis connect privilege to user tilerator"
+  become_user: postgres
+  shell: psql -d gis -c 'GRANT CONNECT ON DATABASE gis TO tilerator;'
+
+- name: "tilerator : grant gis usage privilege to user tilerator"
+  become_user: postgres
+  shell: psql -d gis -c 'GRANT USAGE ON SCHEMA public TO tilerator;'
+
+- name: "tilerator : grant gis select privilege to user tilerator"
+  become_user: postgres
+  shell: psql -d gis -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO tilerator;'
+
+- name: "tilerator : grant gis default select privilege to user tilerator"
+  become_user: postgres
+  shell: psql -d gis -c 'ALTER DEFAULT PRIVILEGES IN SCHEMA public
+   GRANT SELECT ON TABLES TO tilerator;'
+
+# --- #
+
+- name: "tilerator : add osm2pqsql data directory"
+  file: path=/srv/data state=directory owner=postgres group=postgres
+  
+- name: "tilerator : copy osm2pgsql test data"
+  copy: src=umbria.pbf dest=/srv/data/
+
 - name: reload systemd
   when: services.changed
   command: systemctl daemon-reload
@@ -63,22 +101,18 @@
   when: services.changed or conf.changed
   service: name=tilerator-ui state=restarted enabled=yes
 
-- stat: path=/srv/kartozoa
-  register: kartozoa
-
-- set_fact:
-    installed: kartozoa.stat.exists
+## Kartozoa ##
   
 - name: "kartozoa : download"
   git: repo=https://github.com/zoondka/kartozoa.git dest=/srv/kartozoa
   register: src
 
 - name: "kartozoa : update submodules"
-  when: not installed or src.changed
+  when: src.changed
   shell: git submodule update --init chdir=/srv/kartozoa
 
 - name: "kartozoa : install"
-  when: not installed or src.changed
+  when: src.changed
   shell: npm install -g --production --no-optional chdir=/srv/kartozoa
 
 - name: "kartozoa : add user"
