@@ -136,6 +136,8 @@
   when: service.changed
   command: systemctl daemon-reload
 
+# TODO: Maybe enable auto-restart in kartozoa service file, to allow time for cassandra to come online
+  
 - name: "kartozoa : restart"
   when: service.changed or conf.changed
   service: name=kartozoa state=restarted enabled=yes
