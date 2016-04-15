@@ -6,5 +6,5 @@
   ignore_errors: true
 
 - name: wait for system start
-  local_action: wait_for host={{ ansible_host }} port={{ ansible_port }} timeout=5 state=started
+  local_action: wait_for host={{ ansible_host | default(ansible_ssh_host) }} port={{ ansible_port | default(ansible_ssh_port) }} timeout=5 state=started
   become: false

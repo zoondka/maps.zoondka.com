@@ -12,6 +12,10 @@
     - npm
     - redis-server
 
+- name: "set npm root user"
+  shell: npm -g config set user root
+
+
 ## Tilerator ##
 
 - name: "tilerator : download"
@@ -34,7 +38,7 @@
   with_items:
     - tilerator.service
     - tilerator-ui.service
-  register: services
+  register: tilerator_services
 
 - name: "tilerator : make config dir"
   file: path=/etc/tilerator state=directory
@@ -89,17 +93,6 @@
 - name: "tilerator : copy osm2pgsql test data"
   copy: src=umbria.pbf dest=/srv/data/
 
-- name: reload systemd
-  when: services.changed
-  command: systemctl daemon-reload
-
-- name: "tilerator : restart daemon"
-  when: services.changed or conf.changed
-  service: name=tilerator state=restarted enabled=yes
-
-- name: "tilerator : restart ui"
-  when: services.changed or conf.changed
-  service: name=tilerator-ui state=restarted enabled=yes
 
 ## Kartozoa ##
   
@@ -120,7 +113,7 @@
 
 - name: "kartozoa : copy service files"
   copy: src=kartozoa/kartozoa.service dest=/etc/systemd/system/
-  register: service
+  register: kartozoa_service
 
 - name: "kartozoa : make config dir"
   file: path=/etc/kartozoa state=directory
@@ -132,12 +125,7 @@
     - sources.yaml
   register: conf
 
-- name: reload systemd
-  when: service.changed
-  command: systemctl daemon-reload
 
-# TODO: Maybe enable auto-restart in kartozoa service file, to allow time for cassandra to come online
-  
-- name: "kartozoa : restart"
-  when: service.changed or conf.changed
-  service: name=kartozoa state=restarted enabled=yes
+- name: reload systemd
+  when: kartozoa_service.changed or tilerator_services.changed
+  command: systemctl daemon-reload
