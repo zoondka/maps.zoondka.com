@@ -1,10 +1,9 @@
 ---
-# TODO: only add if doesn't exist
 - name: add DataStax repository to sources
-  shell: 'echo "deb http://debian.datastax.com/datastax-ddc 3.4 main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list'
+  lineinfile: dest=/etc/apt/sources.list.d/cassandra.sources.list line="deb http://debian.datastax.com/datastax-ddc 3.4 main"
 
 - name: add DataStax repository key to trusted keys
-  shell: "curl -k -L https://debian.datastax.com/debian/repo_key | sudo apt-key add -"
+  apt_key: url=https://debian.datastax.com/debian/repo_key validate_certs=no
 
 - name: install
   apt: name=datastax-ddc update_cache=yes state=present
