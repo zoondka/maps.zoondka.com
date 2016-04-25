@@ -88,11 +88,18 @@
 # --- #
 
 - name: "tilerator : add osm2pqsql data directory"
-  file: path=/srv/data state=directory owner=postgres group=postgres
+  file: path=/srv/data state=directory recurse=yes owner=postgres group=postgres
   
 - name: "tilerator : copy osm2pgsql test data"
   copy: src=umbria.pbf dest=/srv/data/
 
+- name: "tilerator : download water polygons"
+  get_url: url=http://data.openstreetmapdata.com/water-polygons-split-3857.zip dest=/srv/data/
+
+- name: "tilerator : unzip water polygons"
+  unarchive: copy=no src=/srv/data/water-polygons-split-3857.zip dest=/srv/data/
+
+- file: path=/srv/data/water-polygons-split-3857.zip state=absent
 
 ## Kartozoa ##
   
