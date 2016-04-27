@@ -8,11 +8,25 @@
 - name: install
   apt: name=datastax-ddc update_cache=yes state=present
 
+- name: set cluster name
+  lineinfile: >
+    dest=/etc/cassandra/cassandra.yaml
+    regexp="^cluster_name: 'Test Cluster'"
+    line="cluster_name: 'Tile Cluster'"
+  register: name
+
 - name: set resource limits
   copy: src=cassandra.conf dest=/etc/security/limits.d/
   register: limits
 
-- name: restart
-  when: limits.changed
-  service: name=cassandra state=restarted enabled=yes
-  
+- name: stop
+  when: limits.changed or name.changed
+  service: name=cassandra state=stopped enabled=yes
+ 
+- name: clear data
+  when: name.changed
+  shell: rm -rf /var/lib/cassandra/data/system/*
+
+- name: start
+  when: limits.changed or name.changed
+  service: name=cassandra state=started enabled=yes
