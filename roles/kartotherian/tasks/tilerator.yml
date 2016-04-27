@@ -68,7 +68,10 @@
   file: path=/srv/data state=directory recurse=yes owner=postgres group=postgres
   
 - name: "tilerator : copy osm2pgsql test data"
-  copy: src=umbria.pbf dest=/srv/data/
+  copy: src=liechtenstein-latest.osm.pbf dest=/srv/data/
+
+- name: "tilerator : copy post-import-steps script"
+  copy: src=post-import-steps.sh dest=/srv/data/
 
 - stat: path=/srv/data/water-polygons-split-3857
   register: water_polygons
