@@ -70,10 +70,27 @@
 - name: "tilerator : copy osm2pgsql test data"
   copy: src=umbria.pbf dest=/srv/data/
 
+- stat: path=/srv/data/water-polygons-split-3857
+  register: water_polygons
+
 - name: "tilerator : download water polygons"
+  when: not water_polygons.stat.exists
   get_url: url=http://data.openstreetmapdata.com/water-polygons-split-3857.zip dest=/srv/data/
 
 - name: "tilerator : unzip water polygons"
+  when: not water_polygons.stat.exists
   unarchive: copy=no src=/srv/data/water-polygons-split-3857.zip dest=/srv/data/
 
 - file: path=/srv/data/water-polygons-split-3857.zip state=absent
+
+- name: "tilerator : import water polygons"
+  become_user: postgres
+  shell: shp2pgsql -I -s 3857 -g way /srv/data/water-polygons-split-3857/water_polygons.shp water_polygons | psql -d gis
+
+- name: "tilerator : update water polygons geometry"
+  become_user: postgres
+  shell: psql -d gis -c "select UpdateGeometrySRID('', 'water_polygons', 'way', 900913);"
+
+- name: "tilerator : create water polygons indexes"
+  become_user: postgres
+  shell: psql -d gis -f /usr/local/lib/node_modules/tilerator/node_modules/osm-bright-source/sql/water-indexes.sql
