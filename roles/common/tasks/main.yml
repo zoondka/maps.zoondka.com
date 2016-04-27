@@ -30,3 +30,6 @@
 
 - name: set blockdev readahead
   shell: "blockdev --setra 128 /dev/sda"
+
+- name: install system dependencies
+  apt: name=unzip update_cache=yes state=present

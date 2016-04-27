@@ -1,0 +1,28 @@
+- name: "kartozoa : download"
+  git: repo=https://github.com/zoondka/kartozoa.git dest=/srv/kartozoa
+  register: src
+
+- name: "kartozoa : update submodules"
+  when: src.changed
+  shell: git submodule update --init chdir=/srv/kartozoa
+
+- name: "kartozoa : install"
+  when: src.changed
+  shell: npm install -g --production --no-optional chdir=/srv/kartozoa
+
+- name: "kartozoa : add user"
+  user: name=kartozoa createhome=no
+
+- name: "kartozoa : copy service files"
+  copy: src=kartozoa/kartozoa.service dest=/etc/systemd/system/
+  register: kartozoa_service
+
+- name: "kartozoa : make config dir"
+  file: path=/etc/kartozoa state=directory
+  
+- name: "kartozoa : copy config"
+  copy: src=kartozoa/{{ item }} dest=/etc/kartozoa/
+  with_items:
+    - config.yaml
+    - sources.yaml
+  register: conf

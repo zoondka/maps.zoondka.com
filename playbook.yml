@@ -3,6 +3,7 @@
   hosts: all
   become: yes
   become_method: sudo
+  force_handlers: yes
   
   roles:
     - common
