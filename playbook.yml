@@ -13,4 +13,5 @@
     - postgresql
     - java
     - cassandra
+    - osm2pgsql
     - kartotherian

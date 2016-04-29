@@ -2,17 +2,15 @@
 - name: install dependencies
   apt: name={{ item }} update_cache=yes
   with_items:
-    - git
     - build-essential
     - proj-bin
     - libgeos-dev
-    - osm2pgsql
     - sqlite3
     - nodejs-legacy
     - npm
     - redis-server
 
-- name: "set npm root user"
+- name: set npm root user
   shell: npm -g config set user root
 
 - include: tilerator.yml

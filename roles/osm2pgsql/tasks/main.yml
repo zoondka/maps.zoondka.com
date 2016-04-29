@@ -1,0 +1,35 @@
+---
+- name: install dependencies
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - make
+    - cmake
+    - g++
+    - libboost-dev
+    - libboost-system-dev
+    - libboost-filesystem-dev
+    - libexpat1-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libpq-dev
+    - libgeos-dev
+    - libgeos++-dev
+    - libproj-dev
+    - lua5.2
+    - liblua5.2-dev 
+
+- name: download
+  git: repo=https://github.com/openstreetmap/osm2pgsql.git dest=/usr/local/src/osm2pgsql
+  register: src
+
+- name: make build dir
+  file: path=/usr/local/src/osm2pgsql/build state=directory
+
+- name: build Makefiles
+  shell: chdir=/usr/local/src/osm2pgsql/build cmake ..
+
+- name: compile
+  shell: chdir=/usr/local/src/osm2pgsql/build make
+
+- name: install
+  shell: chdir=/usr/local/src/osm2pgsql/build make install
