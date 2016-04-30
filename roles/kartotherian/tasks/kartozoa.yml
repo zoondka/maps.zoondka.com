@@ -1,14 +1,14 @@
 - name: "kartozoa : download"
-  git: repo=https://github.com/zoondka/kartozoa.git dest=/srv/kartozoa
+  git: repo=https://github.com/zoondka/kartozoa.git dest=/usr/local/src/kartozoa
   register: src
 
 - name: "kartozoa : update submodules"
   when: src.changed
-  shell: git submodule update --init chdir=/srv/kartozoa
+  shell: git submodule update --init chdir=/usr/local/src/kartozoa
 
 - name: "kartozoa : install"
   when: src.changed
-  shell: npm install -g --production --no-optional chdir=/srv/kartozoa
+  shell: npm install -g --production --no-optional chdir=/usr/local/src/kartozoa
 
 - name: "kartozoa : add user"
   user: name=kartozoa createhome=no

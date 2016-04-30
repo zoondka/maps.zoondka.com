@@ -9,7 +9,7 @@ PIDFile=%t/zoondka-maps.pid
 User=zoondka-maps
 Group=zoondka-maps
 Environment="ZOONDKA-MAPS_PORT=16531"
-ExecStart=/usr/bin/java -jar /usr/local/share/zoondka-maps/zoondka-maps.jar 16531
+ExecStart=/usr/bin/java -jar /srv/zoondka-maps/zoondka-maps.jar 16531
 Restart=always
 RestartSec=5
 StandardOutput=syslog

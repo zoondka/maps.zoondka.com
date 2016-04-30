@@ -1,15 +1,15 @@
 ---
 - name: "tilerator : download"
-  git: repo=https://github.com/kartotherian/tilerator.git dest=/srv/tilerator
+  git: repo=https://github.com/kartotherian/tilerator.git dest=/usr/local/src/tilerator
   register: src
 
 - name: "tilerator : update submodules"
   when: src.changed
-  shell: git submodule update --init chdir=/srv/tilerator
+  shell: git submodule update --init chdir=/usr/local/src/tilerator
 
 - name: "tilerator : install"
   when: src.changed
-  shell: npm install -g --production --no-optional chdir=/srv/tilerator
+  shell: npm install -g --production --no-optional chdir=/usr/local/src/tilerator
 
 - name: "tilerator : add user"
   user: name=tilerator createhome=no
