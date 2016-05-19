@@ -1,0 +1,35 @@
+---
+- name: install boot
+  shell: bash -c "cd /usr/local/bin && curl -fsSLo boot https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh && chmod 755 boot"
+
+- name: add user
+  user: name=zoondka-maps shell=/bin/bash
+
+- name: download
+  git: repo=https://github.com/zoondka/zoondka-maps.git dest=/usr/local/src/zoondka-maps
+
+- name: chown zoondka-maps
+  file: path=/usr/local/src/zoondka-maps owner=zoondka-maps group=zoondka-maps recurse=yes
+
+- name: update boot
+  become_user: zoondka-maps
+  shell: boot -u
+
+- name: checkout dependencies
+  become_user: zoondka-maps
+  shell: chdir=/usr/local/src/zoondka-maps boot checkout
+
+- name: build
+  become_user: zoondka-maps
+  shell: chdir=/usr/local/src/zoondka-maps boot prod
+
+- file: path=/srv/zoondka-maps state=directory
+
+- name: install
+  copy: src=/usr/local/src/zoondka-maps/target/zoondka-maps.jar dest=/srv/zoondka-maps remote_src=True
+
+- name: copy service file
+  copy: src=/usr/local/src/zoondka-maps/dist/zoondka-maps.service dest=/etc/systemd/system/ remote_src=True 
+
+- name: reload systemd
+  command: systemctl daemon-reload
