@@ -4,6 +4,8 @@ Configuration & provisioning for our tile server @ maps.zoondka.com using Ansibl
 ## The Stack
 Our tile server is a composition of various tools & applications for the entire tile generation & serving process (storing data, generating vector tiles, storing tiles, serving tiles) all packed into one machine. For storing data, we use the usual suspects: PostgreSQL & [osm2pgsql](https://github.com/openstreetmap/osm2pgsql). For tile generation and serving, we use tools by Wikimedia: [Tilerator](https://github.com/kartotherian/tilerator) and our own fork of [Kartotherian](https://github.com/kartotherian/kartotherian). And for storing generated tiles, we use Cassandra. We also host our [zoondka-maps](https://github.com/zoondka/zoondka-maps) app which uses these tiles.
 
+For more details of the various components & their configurations, you can look through the [roles](https://github.com/zoondka/maps.zoondka.com/tree/master/roles) directory. 
+
 ## Requirements
 ```
 Ansible
