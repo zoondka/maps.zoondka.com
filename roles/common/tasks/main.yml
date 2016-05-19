@@ -31,8 +31,18 @@
 - name: set blockdev readahead
   shell: "blockdev --setra 128 /dev/sda"
 
-- name: install system dependencies
+- name: add zoondev user
+  user: name=zoondev shell=/bin/bash groups=sudo password={{ zoondev_pass | password_hash('sha512') }}
+
+- name: add neovim repo to sources
+  lineinfile: dest=/etc/apt/sources.list line="deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu vivid main"
+
+- name: add neovim key
+  shell: apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 55F96FCF8231B6DD
+
+- name: install apt system dependencies
   apt: name={{ item }} update_cache=yes
   with_items:
     - unzip 
     - git
+    - neovim

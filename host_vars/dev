@@ -1,3 +1,4 @@
+zoondev_pass: dev123
 ssl_cert: |
   -----BEGIN CERTIFICATE-----
   MIID+TCCAuGgAwIBAgIJAMSUOiXuejlFMA0GCSqGSIb3DQEBCwUAMIGSMQswCQYD
