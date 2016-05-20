@@ -6,7 +6,7 @@ Our tile server is a single robust machine composed of various tools & applicati
 
 For storing data, we use the usual suspects: PostgreSQL & [osm2pgsql](https://github.com/openstreetmap/osm2pgsql). For tile generation and serving, we use tools by Wikimedia: [Tilerator](https://github.com/kartotherian/tilerator) and our own fork of [Kartotherian](https://github.com/kartotherian/kartotherian), [Kartozoa](https://github.com/zoondka/kartozoa). For storing generated tiles, we use a single node Cassandra cluster.
 
-For more details of the various components & their configurations, take a look through the [roles](https://github.com/zoondka/maps.zoondka.com/tree/master/roles) directory. 
+For more details of the various components & their configurations, you can take a look through the [roles](https://github.com/zoondka/maps.zoondka.com/tree/master/roles) directory. 
 
 ## Requirements
 ```
