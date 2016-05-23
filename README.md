@@ -46,7 +46,7 @@ exit
 ```
 
 ### Generating Tiles
-We use [Tilerator](https://github.com/kartotherian/tilerator) for generating our vector tiles. For detailed usage, take a look @ their README.
+We use [Tilerator](https://github.com/kartotherian/tilerator) for generating our vector tiles. For detailed usage, take a look @ their [README](https://github.com/kartotherian/tilerator/blob/master/README.md).
 
 Once you've imported some data, you can `vagrant ssh` into your machine & fire up tilerator (workers) and tilerator-ui (ui only) services:
 ```shell
