@@ -1,4 +1,4 @@
-# maps.zoondka.com
+README# maps.zoondka.com
 This repository is a collection of Ansible roles for the configuration & provisioning of our tile server @ maps.zoondka.com.
 
 ## The Stack
@@ -50,6 +50,7 @@ We use [Tilerator](https://github.com/kartotherian/tilerator) for generating our
 
 Once you've imported some data, you can `vagrant ssh` into your machine & fire up tilerator (workers) and tilerator-ui (ui only) services:
 ```shell
+sudo systemctl enable tilerator tilerator-ui
 sudo systemctl start tilerator tilerator-ui
 ```
 Vagrant is set up to forward the tilerator-ui port to localhost, so you can either talk to Tilerator from within the VM @ localhost:16533 or on your host @ localhost:6533. You can post to add a job:
