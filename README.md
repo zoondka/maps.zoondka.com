@@ -65,6 +65,23 @@ curl -X POST 'http://localhost:6533/add?generatorId=gen&storageId=v2&zoom=0&from
 ```
 Or, in a web browser, navigate to `localhost:6533/jobs` to take a look at job progress.
  
+### Serving Tiles
+Once you've generated some tiles, you can serve them with Kartozoa. Simply enable & start the Kartozoa service:
+```shell
+sudo systemctl enable kartozoa
+sudo systemctl start kartozoa
+```
+
+Tiles should now be available internally @ localhost:16532/osm-intl/{zoom}/{x}/{y}.pbf and externally @ https://maps.zoondka.com/kartozoa/osm-intl/{zoom}/{x}/{y}.pbf. Take a look @ [Kartozoa](https://github.com/zoondka/kartozoa) for more info.
+
+### Launching Zoondka Maps
+As with Kartozoa, simply enable & start the zoondka-maps service to host our mapping app:
+```shell
+sudo systemctl enable zoondka-maps
+sudo systemctl start zoondka-maps
+```
+The app should now be available @ localhost:16531 or https://maps.zoondka.com.
+
 ## Hacking
 If you'd like to use parts of this playbook as a starting point for another machine, feel free to fork the repository & enjoy. You will want to create your own production variables and then groom the Ansible roles as you desire. For example, if you'd like to set up a machine just for generating and serving vector tiles using Kartotherian, then this a great repository to start with.
 
